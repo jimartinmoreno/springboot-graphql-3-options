@@ -1,0 +1,109 @@
+package com.example.api.graphql.resovers.user;
+
+import com.example.api.model.User;
+import com.example.api.service.UserService;
+import graphql.kickstart.tools.GraphQLQueryResolver;
+import graphql.relay.Connection;
+import graphql.relay.ConnectionCursor;
+import graphql.relay.DefaultConnection;
+import graphql.relay.DefaultConnectionCursor;
+import graphql.relay.DefaultEdge;
+import graphql.relay.DefaultPageInfo;
+import graphql.relay.Edge;
+import graphql.relay.PageInfo;
+import graphql.schema.DataFetchingEnvironment;
+import graphql.schema.SelectedField;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.Nullable;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
+
+/**
+ * we implement GraphQLQueryResolver to resolve Queries (Read Operations). Note that the method names (users, userById)
+ * and return types (User) are same in GraphQL schema and QueryResolver class.
+ * The names of the method must be one of the following, in this order:
+ * - <field>
+ * - is<field> – only if the field is of type Boolean
+ * - get<field>
+ */
+@Component
+@RequiredArgsConstructor
+@Slf4j
+public class UserQueryResolver implements GraphQLQueryResolver {
+
+    private final UserService userService;
+
+    private final Executor myExecutor;
+
+    public CompletableFuture<List<User>> getUsers() {
+        return CompletableFuture.supplyAsync(userService::getAllUsers, myExecutor);
+    }
+
+    public Connection<User> getUsersPaginated(int number, @Nullable String cursor) {
+        log.info("getUsersPaginated - Get next {} users paginated from cursor {}", number, cursor);
+        List<Edge<User>> edges = getUsersWithCursor(cursor).stream()
+                .map(user -> (Edge<User>) new DefaultEdge<>(user, new DefaultConnectionCursor(user.getId().toString())))
+                .limit(number)
+                .toList();
+
+        log.info("getUsersPaginated - edges {}", edges);
+        ConnectionCursor firstCursor = edges.isEmpty() ? null : edges.get(0).getCursor();
+        ConnectionCursor lastCursor = edges.isEmpty() ? null : edges.get(edges.size() - 1).getCursor();
+        log.info("getUsersPaginated - firstCursor {}", firstCursor);
+        log.info("getUsersPaginated - lastCursor {}", lastCursor);
+        PageInfo pageInfo = new DefaultPageInfo(firstCursor, lastCursor, cursor != null, edges.size() >= number);
+
+        return new DefaultConnection<>(edges, pageInfo);
+    }
+
+    private List<User> getUsersWithCursor(String cursor) {
+        if (cursor == null) {
+            return userService.getAllUsers();
+        }
+        return userService.getAllUsersAfter(Long.valueOf(cursor));
+    }
+
+    /**
+     * @param userId
+     * @param env    A DataFetchingEnvironment instance of passed to a DataFetcher as a execution context and its the place
+     *               where you can find out information to help you resolve a data value given a graphql field input
+     * @return User
+     */
+    //@PreAuthorize("hasAuthority('get:users')")
+    public User getUserById(Long userId, DataFetchingEnvironment env) {
+        log.info("getUserById for user: {}", userId);
+        // Selection fields set requested
+        // printEnvironment("getUserById >>>>>> Selection set:", env, "getUserById >>>>> Variables:", "getUserById >>>>> Arguments:");
+        return userService.getUserById(userId);
+    }
+
+    /**
+     * @param userIds
+     * @param env     A DataFetchingEnvironment instance of passed to a DataFetcher as a execution context and its the place
+     *                where you can find out information to help you resolve a data value given a graphql field input
+     * @return User
+     */
+    //@PreAuthorize("hasAuthority('get:users')")
+    public List<User> getUsersByIds(List<Long> userIds, DataFetchingEnvironment env) {
+        log.info("getUsersByIds >>>>>> userIds: {}", userIds);
+        // Selection fields set requested
+        //printEnvironment("getUsersByIds >>>>>> Selection set:", env, "getUsersByIds >>>>> Variables:", "getUsersByIds >>>>> Arguments:");
+
+        return userService.getAllUsers().stream().filter(user -> userIds.contains(user.getId())).toList();
+    }
+
+    private void printEnvironment(String msg, DataFetchingEnvironment env, String msg1, String msg2) {
+        log.info(msg);
+        env.getSelectionSet().getFields().stream().map(SelectedField::getName).distinct().forEach(log::info);
+        // Request variables
+        log.info(msg1);
+        env.getVariables().entrySet().stream().map(Object::toString).forEach(log::info);
+        // Request arguments, filter arguments
+        log.info(msg2);
+        env.getArguments().entrySet().stream().map(Object::toString).forEach(log::info);
+    }
+}

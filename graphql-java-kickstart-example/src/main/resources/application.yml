@@ -1,0 +1,145 @@
+server:
+  port: 8081
+  http2:
+    enabled: true
+spring:
+  servlet:
+    multipart:
+      max-file-size: 1MB
+  mvc:
+    async:
+      request-timeout: -1
+#  security:
+#    user:
+#      name: admin
+#      password: admin
+#      roles: manager
+
+graphql:
+#  altair:
+#    enabled: true
+#    mapping: /altair
+#    subscriptions:
+#      timeout: 30
+#      reconnect: false
+#    static:
+#      base-path: /
+#    page-title: Altair
+#    cdn:
+#      enabled: false
+#      version: 4.0.2
+#    options:
+#      endpoint-url: /graphql
+#      subscriptions-endpoint: /subscriptions
+#      initial-settings:
+#        theme: dracula
+#      initial-headers:
+#        Authorization: "Bearer <your-token>"
+#    resources:
+#      initial-query: defaultQuery.graphql
+#      initial-variables: variables.graphql
+#      initial-pre-request-script: pre-request.graphql
+#      initial-post-request-script: post-request.graphql
+  servlet:
+    max-query-depth: 20
+    # Enable exception handlers
+    exception-handlers-enabled: false
+
+    tracing-enabled: false # Habilita/Deshabilita las trazas de graphQL
+  # Defined extended scalars
+  extended-scalars: BigDecimal, Date, Url
+
+  playground:
+    enabled: true
+    #    headers:
+    #      Authorization: Bearer TOKEN # Possible options: Bearer TOKEN | Basic Token
+    #      user_id: admin
+    #      user_roles: ADMIN
+    tabs:
+      - name: User
+        query: classpath:playground/user.graphql
+        variables: classpath:playground/user_variables.json
+        headers:
+          SomeHeader: Some value
+        responses:
+          - classpath:playground/responses/GET_USER_BY_ID.json
+      - name: Post
+        query: classpath:playground/post.graphql
+        variables: classpath:playground/post_variables.json
+        headers:
+          Accept: application/json
+          Other-Header: Other Value
+      - name: Comment
+        query: classpath:playground/comment.graphql
+        variables: classpath:playground/comment_variables.json
+        responses:
+          - classpath:playground/responses/allCommentsResponse.json
+          - classpath:playground/responses/commentByIdResponse.json
+        headers:
+          CorrelationId: bfe09b05-ec5c-4d18-8ea4-566718f19769
+      - name: Product
+        query: classpath:playground/product.graphql
+
+    page-title: Nacho's Playground
+    endpoint: /graphql
+    mapping: /personaQL
+    settings:
+#      editor.cursorShape: line # possible values: 'line', 'block', 'underline'
+#      editor.fontFamily: "'Source Code Pro', 'Consolas', 'Inconsolata', 'Droid Sans Mono', 'Monaco', monospace"
+#      editor.fontSize: 14
+      editor.reuseHeaders: true # new tab reuses headers from last tab
+#      editor.theme: light  # possible values: 'dark', 'light'
+#      general.betaUpdates: false
+#      prettier.printWidth: 80
+#      prettier.tabWidth: 4
+#      prettier.useTabs: true
+      request.credentials: include # possible values: 'omit', 'include', 'same-origin' includes the credentials headers in the requests
+#      schema.polling.enable: false # schema.polling.enable: true
+#      schema.polling.endpointFilter: "*localhost*" # o specify a regex pattern to restrict which url to poll. Default: *localhost*
+#      schema.polling.interval: 60000  # schema polling interval in ms
+#      schema.disableComments: false
+#      tracing.hideTracingResponse: false
+
+voyager:
+  enabled: true
+
+logging:
+  level:
+    root: info
+    com.example.api.client: debug
+  pattern:
+    console: -%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(%5p) %clr(${PID:}){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %clr(%X{CorrelationId}){red} %m%n%wEx
+
+feign:
+  httpclient:
+    max-connections-per-route: 20
+    max-connections: 200
+  client:
+    config:
+      default:
+        loggerLevel: BASIC #Possible options: BASIC, FULL, HEADERS, NONE
+        decode404: true
+        connectTimeout: 500
+        readTimeout: 1000
+        metrics.enabled: false
+
+resilience4j.retry:
+  instances:
+    unstableService:
+      maxAttempts: 3
+      waitDuration: 10
+      enableExponentialBackoff: true
+      exponentialBackoffMultiplier: 2
+      retryExceptions:
+        - org.apache.hc.client5.http.ConnectTimeoutException
+        - java.net.SocketTimeoutException
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+#producer:
+#  url: http://localhost:8082
+

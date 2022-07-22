@@ -1,0 +1,44 @@
+query GET_ALL_COMMENTS {
+    comments {
+        id
+        name
+        email
+        body
+        postId
+    }
+}
+
+query GET_COMMENT_BY_ID($commentId: ID) {
+    commentById(id: $commentId) {
+        id
+        body
+        termLoanFrameworkAgreementAcceptAt(country: SE)
+        fixedValue
+        commenter {
+            id
+            name
+            email
+            publish
+            __typename
+        }
+    }
+}
+
+query GET_COMMENTS_BY_POST_ID($postId: ID) {
+    commentsByPostId(postId: $postId) {
+        name
+        email
+        body
+    }
+}
+
+mutation UPDATE_COMMENTER ($commenterInput: CommenterInput) {
+    updateCommenter(input: $commenterInput) {
+        commenter {
+            id
+            name
+            email
+            publish
+        }
+    }
+}

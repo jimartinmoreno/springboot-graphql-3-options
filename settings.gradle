@@ -1,0 +1,6 @@
+rootProject.name = 'spingboot-graphql-2-options'
+
+include 'graphql-java-kickstart-example'
+include 'netflix-dgs-example'
+include 'graphql-clients'
+include 'unstable-service'

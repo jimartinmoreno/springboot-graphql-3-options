@@ -1,0 +1,13 @@
+query PRODUCT {
+    product {
+        name
+        price
+    }
+}
+
+query PRODUCT_SYNC {
+    productSync {
+        name
+        price
+    }
+}

@@ -1,0 +1,7 @@
+query GET_USER_BY_IDS {
+    usersByIds(ids: [1]) {
+        id
+        name
+        username
+    }
+}

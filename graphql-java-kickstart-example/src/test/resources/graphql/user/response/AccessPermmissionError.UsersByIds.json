@@ -1,0 +1,22 @@
+{
+  "errors": [
+    {
+      "message": "Exception while fetching data (/usersByIds) : No access permission",
+      "locations": [
+        {
+          "line": 2,
+          "column": 5
+        }
+      ],
+      "path": [
+        "usersByIds"
+      ],
+      "extensions": {
+        "classification": "DataFetchingException"
+      }
+    }
+  ],
+  "data": {
+    "usersByIds": null
+  }
+}
