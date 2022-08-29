@@ -1,8 +1,10 @@
 package com.example.api.graphql.context;
 
 import com.example.api.graphql.context.dataloader.DataLoaderRegistryFactory;
+import graphql.GraphQLContext;
 import graphql.kickstart.execution.context.DefaultGraphQLContext;
-import graphql.kickstart.execution.context.GraphQLContext;
+//import graphql.kickstart.execution.context.GraphQLContext;
+import graphql.kickstart.execution.context.GraphQLKickstartContext;
 import graphql.kickstart.servlet.context.DefaultGraphQLServletContext;
 import graphql.kickstart.servlet.context.DefaultGraphQLWebSocketContext;
 import graphql.kickstart.servlet.context.GraphQLServletContextBuilder;
@@ -19,6 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.websocket.Session;
 import javax.websocket.server.HandshakeRequest;
 import java.time.Instant;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -45,28 +48,35 @@ public class CustomGraphQLContextBuilder implements GraphQLServletContextBuilder
      * @return
      */
     @Override
-    public GraphQLContext build(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
+    public GraphQLKickstartContext build(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 
         String correlationId = Optional.ofNullable(httpServletRequest.getHeader(CORRELATION_ID))
                 .orElse(UUID.randomUUID().toString());
+
+        SecurityContext securityContext = SecurityContextHolder.getContext();
+
         /**
          * Relacionado con el Contexto e incluir el CorrelationId en los logs
          */
         MDC.put(CORRELATION_ID, correlationId);
-        httpServletRequest.setAttribute(CORRELATION_ID, correlationId);
 
         log.info("build - CorrelationId from header: {}", httpServletRequest.getHeader(CORRELATION_ID));
         log.info("build - CorrelationId final: {}", correlationId);
         log.info("build - MDC ContextMap: {}", MDC.getCopyOfContextMap());
-        log.info("build - AttributeNames: {}", httpServletRequest.getAttributeNames());
 
-        DefaultGraphQLServletContext defaultGraphQLServletContext = DefaultGraphQLServletContext.createServletContext()
-                .with(httpServletRequest)
-                .with(httpServletResponse)
-                .with(dataLoaderRegistryFactory.create())
-                .build();
+        return GraphQLKickstartContext.of(dataLoaderRegistryFactory.create(),
+                Map.of(httpServletRequest, httpServletRequest,
+                        httpServletResponse, httpServletResponse,
+                        SECURITY_CONTEXT, securityContext,
+                        CORRELATION_ID, correlationId));
 
-        return defaultGraphQLServletContext;
+        //        DefaultGraphQLServletContext defaultGraphQLServletContext = DefaultGraphQLServletContext.createServletContext()
+        //                .with(httpServletRequest)
+        //                .with(httpServletResponse)
+        //                .with(dataLoaderRegistryFactory.create())
+        //                .build();
+
+        //return defaultGraphQLServletContext;
 
         // return new CustomGraphQLContext(userId, context);
         //        return CustomGraphQLContext.builder()
@@ -78,27 +88,37 @@ public class CustomGraphQLContextBuilder implements GraphQLServletContextBuilder
     }
 
     @Override
-    public GraphQLContext build(Session session, HandshakeRequest handshakeRequest) {
+    public GraphQLKickstartContext build(Session session, HandshakeRequest handshakeRequest) {
         var userId = handshakeRequest.getHeaders().get("user_id").get(0);
         log.info("build - CorrelationId from header: {}", handshakeRequest.getHeaders().get(CORRELATION_ID));
 
         String correlationId = Optional.ofNullable(handshakeRequest.getHeaders().get(CORRELATION_ID).toString())
                 .orElse(UUID.randomUUID().toString());
 
+        SecurityContext securityContext = SecurityContextHolder.getContext();
+
         MDC.put(CORRELATION_ID, correlationId);
         log.info("build - CorrelationId final: {}", handshakeRequest.getHeaders().get(CORRELATION_ID));
         log.info("MDC ContextMap: {}", MDC.getCopyOfContextMap());
         log.info("userId: {}", userId);
 
-        return DefaultGraphQLWebSocketContext.createWebSocketContext()
-                .with(session)
-                .with(handshakeRequest)
-                .with(dataLoaderRegistryFactory.create())
-                .build();
+        return GraphQLKickstartContext.of(dataLoaderRegistryFactory.create(),
+                Map.of(session, session,
+                        handshakeRequest, handshakeRequest,
+                        SECURITY_CONTEXT, securityContext,
+                        CORRELATION_ID, correlationId
+                ));
+
+        //        return DefaultGraphQLWebSocketContext.createWebSocketContext()
+        //                .with(session)
+        //                .with(handshakeRequest)
+        //                .with(dataLoaderRegistryFactory.create())
+        //                .build();
     }
 
     @Override
-    public GraphQLContext build() {
-        return new DefaultGraphQLContext();
+    public GraphQLKickstartContext build() {
+        return GraphQLKickstartContext.of(dataLoaderRegistryFactory.create());
+        // return new DefaultGraphQLContext();
     }
 }

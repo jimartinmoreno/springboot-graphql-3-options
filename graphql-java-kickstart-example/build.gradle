@@ -25,8 +25,18 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
 
     // https://github.com/graphql-java-kickstart/graphql-spring-boot
-    implementation 'com.graphql-java-kickstart:graphql-spring-boot-starter:12.0.0'
+    implementation 'com.graphql-java-kickstart:graphql-spring-boot-starter:14.0.0'
     //implementation 'com.graphql-java-kickstart:graphql-spring-boot-starter:11.1.0'
+    // to embed Voyager tool at hostname:post/voyager
+    runtimeOnly 'com.graphql-java-kickstart:voyager-spring-boot-starter:11.1.0'
+    // Extended scalars
+    //implementation "com.graphql-java:graphql-java-extended-scalars:16.0.1"
+    implementation('com.graphql-java:graphql-java-extended-scalars:17.0') {
+        exclude group: 'com.graphql-java', module: 'graphql-java'
+    }
+
+    // GraphiQL
+    runtimeOnly 'com.graphql-java:graphiql-spring-boot-starter:5.0.2'
 
     // Security
     implementation 'org.springframework.boot:spring-boot-starter-security'
@@ -40,14 +50,10 @@ dependencies {
 
     implementation 'commons-io:commons-io:2.11.0'
 
-    // Extended scalars
-    //implementation "com.graphql-java:graphql-java-extended-scalars:16.0.1"
-    implementation('com.graphql-java:graphql-java-extended-scalars:17.0') {
-        exclude group: 'com.graphql-java', module: 'graphql-java'
-    }
+
     implementation 'org.projectlombok:lombok:1.18.22'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'com.graphql-java-kickstart:graphql-spring-boot-starter-test:12.0.0'
+    testImplementation 'com.graphql-java-kickstart:graphql-spring-boot-starter-test:14.0.0'
     //testImplementation 'com.graphql-java-kickstart:graphql-spring-boot-starter-test:11.1.0'
 
     // to embed GraphQL Playground tool at hostname:port/playground
@@ -56,11 +62,7 @@ dependencies {
     // to embed GraphQL altair tool at hostname:port/altair
     //implementation 'com.graphql-java-kickstart:altair-spring-boot-starter:11.1.0'
 
-    // to embed Voyager tool at hostname:post/voyager
-    runtimeOnly 'com.graphql-java-kickstart:voyager-spring-boot-starter:11.1.0'
 
-    // GraphiQL
-    runtimeOnly 'com.graphql-java:graphiql-spring-boot-starter:5.0.2'
 
     // Lombok and commons for boilerplate code
     compileOnly 'org.projectlombok:lombok:1.18.22'
