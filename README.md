@@ -10,7 +10,7 @@ Fortunately, We have two libraries available which provides a wrapper on top of 
 1. GraphQL Java Kickstart
 2. Netflix DGS
 
-## GraphQL Java Kickstart
+## GraphQL Java Kickstart v14
 [GraphQL-Java-Kiskstart](https://github.com/graphql-java-kickstart) provides a wrapper on top of graphql-java and has following features:-
 1. Provide comprehensive Spring boot configuration to customize GraphQL Java Server
 2. Auto-detect schema files in `src/main/resources/*.*/*.graphqls` directory. This is where you write GraphQL schema, queries and mutation.
@@ -41,7 +41,7 @@ Fortunately, We have two libraries available which provides a wrapper on top of 
 22. **Correlation ID** (Thread propagation): In a multi-threaded graphql server it is imperative to propagate a request correlation id to all threads invoked. We then customize the logback console appender to print the %X{correlation_id} with every log line. 
 23. **DataLoader Key Context**: N+1 problem second approach
 24. **Spring Security Authorization**: Configure our Spring Boot GraphQL server with Spring Security pre authorization.
-25. **MDC Correlation ID**: GraphQL version 12.0.0+ executes asynchronously by default. This introduced an additional thread-pool (created inside GraphQLWebSecurityAutoConfiguration or GraphQLWebAutoConfiguration) that will be execute the resolver threadsThe Correlation ID is propagated from the Tomcat NIO Thread to the new thread-pool via a graphql.kickstart.servlet.AsyncTaskDecorator. One class MdcContextTaskDecorator implements both interfaces, to keep things simple.
+25. **MDC Correlation ID**: GraphQL version 14.0.0+ executes asynchronously by default. This introduced an additional thread-pool (created inside GraphQLWebSecurityAutoConfiguration or GraphQLWebAutoConfiguration) that will be execute the resolver threadsThe Correlation ID is propagated from the Tomcat NIO Thread to the new thread-pool via a graphql.kickstart.servlet.AsyncTaskDecorator. One class MdcContextTaskDecorator implements both interfaces, to keep things simple.
 26. **Query Caching Server Side**: cache GraphQL queries on the server side
 
 ## Netflix DGS
