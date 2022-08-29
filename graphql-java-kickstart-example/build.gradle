@@ -31,7 +31,7 @@ dependencies {
     runtimeOnly 'com.graphql-java-kickstart:voyager-spring-boot-starter:11.1.0'
     // Extended scalars
     //implementation "com.graphql-java:graphql-java-extended-scalars:16.0.1"
-    implementation('com.graphql-java:graphql-java-extended-scalars:17.0') {
+    implementation('com.graphql-java:graphql-java-extended-scalars:18.1') {
         exclude group: 'com.graphql-java', module: 'graphql-java'
     }
 
@@ -50,8 +50,6 @@ dependencies {
 
     implementation 'commons-io:commons-io:2.11.0'
 
-
-    implementation 'org.projectlombok:lombok:1.18.22'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'com.graphql-java-kickstart:graphql-spring-boot-starter-test:14.0.0'
     //testImplementation 'com.graphql-java-kickstart:graphql-spring-boot-starter-test:11.1.0'
@@ -62,17 +60,15 @@ dependencies {
     // to embed GraphQL altair tool at hostname:port/altair
     //implementation 'com.graphql-java-kickstart:altair-spring-boot-starter:11.1.0'
 
-
-
     // Lombok and commons for boilerplate code
-    compileOnly 'org.projectlombok:lombok:1.18.22'
-    annotationProcessor 'org.projectlombok:lombok:1.18.22'
-    testAnnotationProcessor "org.projectlombok:lombok:1.18.22"
+    implementation 'org.projectlombok:lombok:1.18.24'
+    compileOnly 'org.projectlombok:lombok:1.18.24'
+    annotationProcessor 'org.projectlombok:lombok:1.18.24'
+    testAnnotationProcessor "org.projectlombok:lombok:1.18.24"
 
     // implementation 'com.graphql-java-kickstart:altair-spring-boot-starter:11.1.0'
     // to embed Altair tool
     // runtimeOnly 'com.graphql-java-kickstart:altair-spring-boot-starter:12.0.0'
-
 
     //    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
     implementation 'io.github.openfeign:feign-hc5:11.8'
