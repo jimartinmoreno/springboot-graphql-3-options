@@ -18,9 +18,8 @@ import org.springframework.security.web.authentication.preauth.PreAuthenticatedA
 
 import javax.servlet.Filter;
 
-@Configuration
 @EnableWebSecurity // Debug = true, will print the execution of the FilterChainProxy
-@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
+//@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
 @RequiredArgsConstructor
 @Slf4j
 public class GraphQLSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -65,6 +64,8 @@ public class GraphQLSecurityConfig extends WebSecurityConfigurerAdapter {
 
         // Add the Pre Authentication Filter
         http
+                // Disable CSRF Token generation
+                .csrf().disable()
                 .addFilterBefore(createRequestHeadersPreAuthenticationFilter(), AbstractPreAuthenticatedProcessingFilter.class)
                 .authorizeRequests()
                 .antMatchers("/graphql")
@@ -75,8 +76,6 @@ public class GraphQLSecurityConfig extends WebSecurityConfigurerAdapter {
                 // All endpoints require authentication
                 .anyRequest().authenticated()
                 .and()
-                // Disable CSRF Token generation
-                .csrf().disable()
                 // Disable the default HTTP Basic-Auth
                 .httpBasic()//.disable()
                 // Disable the session management filter

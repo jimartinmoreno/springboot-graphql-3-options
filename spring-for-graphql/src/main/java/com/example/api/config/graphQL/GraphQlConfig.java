@@ -11,10 +11,8 @@ public class GraphQlConfig {
 
     @Bean
     public RuntimeWiringConfigurer runtimeWiringConfigurer() {
-        SchemaDirectiveWiring directiveWiring = new AuthorizationDirective();
         return wiringBuilder -> wiringBuilder
-                .directiveWiring(directiveWiring)
+                .directiveWiring(new AuthorizationDirective());
                 // .directive("auth", directiveWiring)
-                .build();
     }
 }

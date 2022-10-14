@@ -33,10 +33,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserById(Long id) {
-        throw new GraphQLException("Mi excepcion");
-//        User user = userFeignClient.getUserById(id);
-//        log.info("User: {}", user);
-//        return user;
+        User user = userFeignClient.getUserById(id);
+        log.info("User: {}", user);
+        return user;
     }
 
     @Override
