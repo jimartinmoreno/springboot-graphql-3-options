@@ -1,0 +1,27 @@
+# Query for read operations
+directive @auth(role : String!) on FIELD_DEFINITION | INPUT_FIELD_DEFINITION | FIELD_DEFINITION | MUTATION | QUERY
+
+# All Available Queries
+type Query {
+    # Get All Users
+    getUsers: [User] @auth(role : "ROLE_ADMIN"),
+    # Get User by userId
+    getUserById(id:ID): User @auth(role : "ROLE_ADMIN")
+    # Get User by userIds
+    getUsersByIds(ids:[ID]): [User] @auth(role : "ROLE_ADMIN")
+    # Get All Posts
+    getPosts: [Post]
+    # Get Post by postId
+    getPostById(id:ID): Post
+    # Get All Posts by userId
+    getPostsByUserId(userId:ID): [Post]
+    # Get All Comments
+    #comments: [Comment] #@auth(role : "ROLE_ADMIN")
+    # Get Comment by commentId
+    #commentById(id:ID): Comment #@auth(role : "ROLE_ADMIN")
+    # Get All Comments by postId
+    #commentsByPostId(postId:ID): [Comment]
+
+    getProductSync: Product
+    geProduct: Product
+}

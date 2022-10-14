@@ -71,6 +71,7 @@ dependencies {
 
 dependencyManagement {
     imports {
+        mavenBom "org.springframework.boot:spring-boot-starter-parent:2.7.2"
         mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
     }
 }

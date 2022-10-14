@@ -1,0 +1,30 @@
+# Comment Description: harum non quasi et ratione
+type Comment {
+    id: ID!
+    postId: String
+    name: String
+    email: String
+    body: String
+    termLoanFrameworkAgreementAcceptAt(country: AgreementCountry!): String @auth(role : "ROLE_ADMIN")
+    fixedValue: String
+    commenter: Commenter @auth(role : "ROLE_ADMIN")
+}
+
+enum AgreementCountry{
+    SE, NO, DE
+}
+
+# Commenter Description: harum non quasi et ratione
+type Commenter {
+    id: ID!
+    name: String
+    email: String
+    publish: Boolean
+}
+
+# Commenter Description: harum non quasi et ratione
+input CommenterInput {
+    commentId: ID!
+    name: String!
+    email: String!
+}

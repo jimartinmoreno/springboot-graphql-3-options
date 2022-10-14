@@ -17,6 +17,7 @@ import static com.example.api.graphql.instrumentation.RequestLoggingInstrumentat
 @Slf4j
 public class LoggingListener implements GraphQLServletListener {
 
+
     @Override
     public RequestCallback onRequest(HttpServletRequest request, HttpServletResponse response) {
         log.info("onRequest - Received graphQL request");
@@ -52,4 +53,6 @@ public class LoggingListener implements GraphQLServletListener {
             }
         };
     }
+
+
 }

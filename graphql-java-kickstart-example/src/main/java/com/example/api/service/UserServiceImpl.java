@@ -1,6 +1,7 @@
 package com.example.api.service;
 
 import com.example.api.client.UserFeignClient;
+import com.example.api.exception.GraphQLException;
 import com.example.api.model.User;
 import com.example.api.model.UserInput;
 import lombok.RequiredArgsConstructor;
@@ -32,9 +33,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserById(Long id) {
-        User user = userFeignClient.getUserById(id);
-        log.info("User: {}", user);
-        return user;
+        throw new GraphQLException("Mi excepcion");
+//        User user = userFeignClient.getUserById(id);
+//        log.info("User: {}", user);
+//        return user;
     }
 
     @Override

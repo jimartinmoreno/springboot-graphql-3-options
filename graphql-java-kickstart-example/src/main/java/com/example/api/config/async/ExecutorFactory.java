@@ -2,15 +2,11 @@ package com.example.api.config.async;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Bean;
 import org.springframework.core.task.AsyncTaskExecutor;
 import org.springframework.core.task.TaskDecorator;
-import org.springframework.core.task.TaskExecutor;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.security.task.DelegatingSecurityContextAsyncTaskExecutor;
 import org.springframework.stereotype.Component;
-
-import java.util.concurrent.Executor;
 
 @Component
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)

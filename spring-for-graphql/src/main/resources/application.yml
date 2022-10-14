@@ -1,0 +1,52 @@
+server:
+  port: 8081
+  http2:
+    enabled: true
+spring:
+  servlet:
+    multipart:
+      max-file-size: 1MB
+  mvc:
+    async:
+      request-timeout: -1
+
+  graphql:
+    graphiql:
+      enabled: true
+
+logging:
+  level:
+    root: info
+    com.example.api.client: warn
+  pattern:
+    console: -%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(%5p) %clr(${PID:}){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %clr(%X{CorrelationId}){red} %m%n%wEx
+
+feign:
+  httpclient:
+    max-connections-per-route: 20
+    max-connections: 200
+  client:
+    config:
+      default:
+        loggerLevel: BASIC #Possible options: BASIC, FULL, HEADERS, NONE
+        decode404: true
+        connectTimeout: 500
+        readTimeout: 1000
+        metrics.enabled: false
+
+resilience4j.retry:
+  instances:
+    unstableService:
+      maxAttempts: 3
+      waitDuration: 10
+      enableExponentialBackoff: true
+      exponentialBackoffMultiplier: 2
+      retryExceptions:
+        - org.apache.hc.client5.http.ConnectTimeoutException
+        - java.net.SocketTimeoutException
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"

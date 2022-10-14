@@ -1,16 +1,14 @@
 package com.example.api.exception;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import graphql.ExceptionWhileDataFetching;
 import graphql.GraphQLError;
-import graphql.execution.DataFetcherExceptionHandler;
 import graphql.kickstart.execution.error.GraphQLErrorHandler;
+import graphql.kickstart.spring.error.ThrowableGraphQLError;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Handler to handle the returned list of errors. the default implementation is the DefaultGraphQLErrorHandler
@@ -18,6 +16,13 @@ import java.util.stream.Collectors;
 @Component
 @Slf4j
 public class CustomGraphQLErrorHandler implements GraphQLErrorHandler {
+
+    @ExceptionHandler
+    public ThrowableGraphQLError handle(Exception e) {
+        log.warn("handle Exception: {}", e.getMessage());
+        return new ThrowableGraphQLError(e);
+    }
+
     @Override
     public List<GraphQLError> processErrors(List<GraphQLError> errors) {
         log.info("processErrors Errors:  {}", errors);

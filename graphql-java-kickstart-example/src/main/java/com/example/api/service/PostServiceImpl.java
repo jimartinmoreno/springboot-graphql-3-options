@@ -79,7 +79,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Map<Long, List<Post>> getAllPostsByUserId(Set<Long> users) {
-        log.info("getAllPostsByUserId - Requesting batch post of userIds: {} for user Id: {}", users);
+        log.info("getAllPostsByUserId - Requesting batch post of userIds: {}", users);
         Map<Long, List<Post>> result = new HashMap<>();
         users.forEach(user -> result.put(user, postFeignClient.getPostByUserId(user)));
         return result;

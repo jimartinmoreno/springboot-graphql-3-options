@@ -1,0 +1,46 @@
+# User Description: harum non quasi et ratione
+#tempore iure ex voluptates in ratione
+#harum architecto fugit inventore cupiditate
+#voluptates magni quo et
+type User {
+    id: ID!
+    name: String @auth(role : "ROLE_ADMIN")
+    username: String @auth(role : "ROLE_ADMIN")
+    email: String @auth(role : "ROLE_ADMIN")
+    phone: String @auth(role : "ROLE_ADMIN")
+    website: String
+    posts: [Post]
+    address: Address
+    company: Company
+}
+# Address Description: harum non quasi et ratione
+#tempore iure ex voluptates in ratione
+#harum architecto fugit inventore cupiditate
+#voluptates magni quo et
+type Address {
+    street: String
+    suite: String
+    city: String
+    zipcode: String
+}
+# Company Description: harum non quasi et ratione
+#tempore iure ex voluptates in ratione
+#harum architecto fugit inventore cupiditate
+#voluptates magni quo et
+type Company {
+    name: String
+    catchPhrase: String
+    bs: String
+    nonParentResolverTrait: String
+}
+# User Input: harum non quasi et ratione
+##tempore iure ex voluptates in ratione
+##harum architecto fugit inventore cupiditate
+##voluptates magni quo et
+input UserInput {
+    name: String
+    username: String
+    email: String
+    phone: String
+    website: String
+}

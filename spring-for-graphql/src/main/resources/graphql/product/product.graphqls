@@ -1,0 +1,5 @@
+# Comment Description: harum non quasi et ratione
+type Product {
+    name: String!,
+    price: String!,
+}

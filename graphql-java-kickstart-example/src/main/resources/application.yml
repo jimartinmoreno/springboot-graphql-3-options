@@ -43,7 +43,7 @@ graphql:
   servlet:
     max-query-depth: 20
     # Enable exception handlers
-    exception-handlers-enabled: false
+    exception-handlers-enabled: true
 
     tracing-enabled: false # Habilita/Deshabilita las trazas de graphQL
   # Defined extended scalars
