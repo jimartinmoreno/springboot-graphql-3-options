@@ -2,16 +2,11 @@ package com.example.api.config.security;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.MDC;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.web.authentication.preauth.AbstractPreAuthenticatedProcessingFilter;
 
 import javax.servlet.http.HttpServletRequest;
 
-import java.util.Optional;
-import java.util.UUID;
-
-import static com.example.api.config.security.GraphQLSecurityConfig.USER_ID_PRE_AUTH_HEADER;
+import static com.example.api.config.security.SecurityConfig.USER_ID_PRE_AUTH_HEADER;
 import static com.example.api.graphql.instrumentation.RequestLoggingInstrumentation.CORRELATION_ID;
 
 /**

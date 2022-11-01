@@ -1,6 +1,5 @@
 package com.example.api.cache;
 
-import com.example.api.config.security.GraphQLSecurityConfig;
 import com.github.benmanes.caffeine.cache.Cache;
 import graphql.kickstart.execution.input.GraphQLInvocationInput;
 import graphql.kickstart.execution.input.GraphQLSingleInvocationInput;
@@ -8,9 +7,10 @@ import graphql.kickstart.servlet.cache.CachedResponse;
 import graphql.kickstart.servlet.cache.GraphQLResponseCacheManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
+
+import static com.example.api.config.security.SecurityConfig.USER_ID_PRE_AUTH_HEADER;
 
 @Slf4j
 //  @Component
@@ -21,10 +21,6 @@ public class ResponseCacheManager implements GraphQLResponseCacheManager {
 
     /**
      * Retrieve the cache by input data. If this query was not cached before, will return empty Optional.
-     *
-     * @param request
-     * @param invocationInput
-     * @return
      */
     @Override
     public CachedResponse get(HttpServletRequest request, GraphQLInvocationInput invocationInput) {
@@ -33,10 +29,6 @@ public class ResponseCacheManager implements GraphQLResponseCacheManager {
 
     /**
      * Decide to cache or not this response. It depends on the implementation.
-     *
-     * @param request
-     * @param invocationInput
-     * @return
      */
     @Override
     public boolean isCacheable(HttpServletRequest request, GraphQLInvocationInput invocationInput) {
@@ -46,10 +38,6 @@ public class ResponseCacheManager implements GraphQLResponseCacheManager {
 
     /**
      * Cache this response.
-     *
-     * @param request
-     * @param invocationInput
-     * @param cachedResponse  success response
      */
     @Override
     public void put(HttpServletRequest request, GraphQLInvocationInput invocationInput, CachedResponse cachedResponse) {
@@ -58,10 +46,6 @@ public class ResponseCacheManager implements GraphQLResponseCacheManager {
 
     /**
      * Generates the request query
-     *
-     * @param request
-     * @param invocationInput
-     * @return
      */
     private RequestKey getRequestKey(HttpServletRequest request, GraphQLInvocationInput invocationInput) {
         log.info("RequestKey >> {},  {},  {}, {}", // , {}",
@@ -80,12 +64,9 @@ public class ResponseCacheManager implements GraphQLResponseCacheManager {
 
     /**
      * Fetch the current user ID
-     *
-     * @param request
-     * @return
      */
     private String getUserId(HttpServletRequest request) {
-        var userId = request.getHeader(GraphQLSecurityConfig.USER_ID_PRE_AUTH_HEADER);
+        var userId = request.getHeader(USER_ID_PRE_AUTH_HEADER);
         if (userId == null) {
             // throw new IllegalArgumentException("User Id is null. Cannot read from ResponseCacheManager.");
             userId = "IDP|ignachete7";

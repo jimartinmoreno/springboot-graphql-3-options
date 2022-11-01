@@ -18,10 +18,9 @@ import org.springframework.security.web.authentication.preauth.PreAuthenticatedA
 
 import javax.servlet.Filter;
 
-@Configuration
-@EnableWebSecurity // Debug = true, will print the execution of the FilterChainProxy
-@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
-//@EnableGlobalMethodSecurity(prePostEnabled = true)
+//@Configuration
+//@EnableWebSecurity // Debug = true, will print the execution of the FilterChainProxy
+//@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
 @RequiredArgsConstructor
 @Slf4j
 public class GraphQLSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -38,9 +37,9 @@ public class GraphQLSecurityConfig extends WebSecurityConfigurerAdapter {
      * Using pre-auth headers provide you the ability to switch or support other authentication
      * methods without making any/many application code changes. (E.g. JWT to something else)
      */
-    public static final String USER_ID_PRE_AUTH_HEADER = "user_id";
-    public static final String USER_ROLES_PRE_AUTH_HEADER = "user_roles";
-    public static final String CORRELATION_ID = "correlation_ID";
+//    public static final String USER_ID_PRE_AUTH_HEADER = "user_id";
+//    public static final String USER_ROLES_PRE_AUTH_HEADER = "user_roles";
+//    public static final String CORRELATION_ID = "correlation_ID";
 
     private final PreAuthenticatedAuthenticationProvider preAuthenticatedAuthenticationProvider;
 

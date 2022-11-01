@@ -6,7 +6,7 @@ import org.springframework.security.web.authentication.preauth.PreAuthenticatedG
 
 import javax.servlet.http.HttpServletRequest;
 
-import static com.example.api.config.security.GraphQLSecurityConfig.USER_ROLES_PRE_AUTH_HEADER;
+import static com.example.api.config.security.SecurityConfig.USER_ROLES_PRE_AUTH_HEADER;
 
 /**
  * This AuthenticationDetails implementation allows for storing a list of pre-authenticated Granted Authorities.

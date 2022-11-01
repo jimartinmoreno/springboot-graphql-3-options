@@ -3,6 +3,11 @@ server:
   http2:
     enabled: true
 spring:
+  cloud:
+    stream:
+      bindings:
+        authenticationMessageConsumer-in-0:
+          enabled: false
   servlet:
     multipart:
       max-file-size: 1MB

@@ -6,7 +6,7 @@ import org.springframework.security.web.authentication.preauth.AbstractPreAuthen
 
 import javax.servlet.http.HttpServletRequest;
 
-import static com.example.api.config.security.GraphQLSecurityConfig.USER_ID_PRE_AUTH_HEADER;
+import static com.example.api.config.security.SecurityConfig.USER_ID_PRE_AUTH_HEADER;
 import static com.example.api.config.graphQL.instrumentation.LoggingInstrumentation.CORRELATION_ID;
 
 /**

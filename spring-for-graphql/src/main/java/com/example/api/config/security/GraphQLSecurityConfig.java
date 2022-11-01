@@ -18,7 +18,7 @@ import org.springframework.security.web.authentication.preauth.PreAuthenticatedA
 
 import javax.servlet.Filter;
 
-@EnableWebSecurity // Debug = true, will print the execution of the FilterChainProxy
+//@EnableWebSecurity // Debug = true, will print the execution of the FilterChainProxy
 //@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
 @RequiredArgsConstructor
 @Slf4j
@@ -36,8 +36,8 @@ public class GraphQLSecurityConfig extends WebSecurityConfigurerAdapter {
      * Using pre-auth headers provide you the ability to switch or support other authentication
      * methods without making any/many application code changes. (E.g. JWT to something else)
      */
-    public static final String USER_ID_PRE_AUTH_HEADER = "user_id";
-    public static final String USER_ROLES_PRE_AUTH_HEADER = "user_roles";
+//    public static final String USER_ID_PRE_AUTH_HEADER = "user_id";
+//    public static final String USER_ROLES_PRE_AUTH_HEADER = "user_roles";
 
     private final PreAuthenticatedAuthenticationProvider preAuthenticatedAuthenticationProvider;
 
@@ -71,7 +71,7 @@ public class GraphQLSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/graphql")
                 .hasAnyRole("USER", "MANAGER", "ADMIN")
                 // Permit graphiql
-                .antMatchers("/graphiql/**", "/graphql**", "/subscriptions/**", "/vendor/**", "/graphiql-subscriptions-fetcher@0.0.2/**", "/subscriptions-transport-ws@0.8.3/**")
+                .antMatchers("/graphiql/**", "/graphql**", "/subscriptions/**", "/vendor/**", "/graphiql-subscriptions-fetcher@0.0.2/**", "/subscriptions-transport-ws@0.8.3/**", "/actuator/**")
                 .hasAnyRole("USER", "MANAGER", "ADMIN")
                 // All endpoints require authentication
                 .anyRequest().authenticated()

@@ -13,7 +13,9 @@ import org.springframework.stereotype.Component;
 import java.util.Map;
 import java.util.UUID;
 
-import static com.example.api.config.security.GraphQLSecurityConfig.CORRELATION_ID;
+import static com.example.api.config.security.SecurityConfig.CORRELATION_ID;
+import static com.example.api.config.security.SecurityConfig.USER_ID_PRE_AUTH_HEADER;
+import static com.example.api.config.security.SecurityConfig.USER_ROLES_PRE_AUTH_HEADER;
 
 @Slf4j
 @Component
@@ -35,8 +37,8 @@ public class AuthenticationConnectionListener implements ApolloSubscriptionConne
         var payload = (Map<String, String>) message.getPayload();
 
         // Get the user id, roles (or JWT etc) and perform authentication / rejection here
-        var userId = payload.get(GraphQLSecurityConfig.USER_ID_PRE_AUTH_HEADER);
-        var userRoles = payload.get(GraphQLSecurityConfig.USER_ROLES_PRE_AUTH_HEADER);
+        var userId = payload.get(USER_ID_PRE_AUTH_HEADER);
+        var userRoles = payload.get(USER_ROLES_PRE_AUTH_HEADER);
         var grantedAuthorities = GrantedAuthorityFactory.getAuthoritiesFrom(userRoles);
 
         /**
