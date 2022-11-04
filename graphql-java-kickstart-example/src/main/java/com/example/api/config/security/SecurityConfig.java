@@ -2,14 +2,22 @@ package com.example.api.config.security;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
+import static org.springframework.security.config.Customizer.withDefaults;
+
+@Configuration
 @EnableWebSecurity
 @Slf4j
 public class SecurityConfig {
@@ -19,34 +27,34 @@ public class SecurityConfig {
     public static final String CORRELATION_ID = "correlation_ID";
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, AuthenticationManager authenticationManager) throws Exception {
+//    public SecurityFilterChain securityFilterChain(HttpSecurity http, AuthenticationManager authenticationManager) throws Exception {
+//    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+//    public SecurityFilterChain securityFilterChain(HttpSecurity http, Filter createRequestHeadersPreAuthenticationFilter, AuthenticationManager authenticationManager) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, InMemoryUserDetailsManager userDetailsService) throws Exception {
         http
-                .authorizeRequests(ac -> {
+                .userDetailsService(userDetailsService)
+                //.authenticationManager(authenticationManager);
+                //.addFilterBefore(createRequestHeadersPreAuthenticationFilter, AbstractPreAuthenticatedProcessingFilter.class)
+                .csrf().disable().authorizeRequests(ac -> {
                     ac
-                            .antMatchers("/graphql", "/personaQL", "/vendor/personaQL/**", "/graphiql/**", "/graphql**",
-                                    "/subscriptions/**", "/vendor/**", "/graphiql-subscriptions-fetcher@0.0.2/**",
-                                    "/subscriptions-transport-ws@0.8.3/**", "/altair/**")
+                            .antMatchers("/graphql", "/personaQL", "/vendor/personaQL/**", "/graphiql/**",
+                                    "/graphql**", "/subscriptions/**", "/vendor/**", "/graphiql-subscriptions-fetcher@0.0.2/**",
+                                    "/subscriptions-transport-ws@0.8.3/**")
                             .hasAnyRole("USER", "MANAGER", "ADMIN");
                     // All endpoints require authentication
                     ac.anyRequest().authenticated();
                 })
-                // Disable CSRF Token generation
-                .csrf().disable()
-                // Disable the default HTTP Basic-Auth
-                .httpBasic()
-                .and()
-                // Disable the /logout filter
-                //.logout().disable()
-                // Disable anonymous users
+                .httpBasic(withDefaults())
                 .anonymous().disable();
-        http.authenticationManager(authenticationManager);
+
         return http.build();
     }
 
-    @Bean
+    //@Bean
+    //public AuthenticationManager authenticationManager(HttpSecurity http, PasswordEncoder passwordEncoder, InMemoryUserDetailsManager userDetailsService) throws Exception {
     public AuthenticationManager authenticationManager(HttpSecurity http, PasswordEncoder passwordEncoder) throws Exception {
-        AuthenticationManagerBuilder authenticationManagerBuilder =
-                http.getSharedObject(AuthenticationManagerBuilder.class);
+        AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
+        //authenticationManagerBuilder.userDetailsService(userDetailsService);
 
         authenticationManagerBuilder.inMemoryAuthentication()
                 .withUser("user")
@@ -64,7 +72,43 @@ public class SecurityConfig {
     }
 
     @Bean
+    public InMemoryUserDetailsManager userDetailsService() {
+        UserDetails admin = User.builder()
+                .username("admin")
+                .password("admin")
+                .passwordEncoder(passwordEncoder()::encode)
+                .roles("ADMIN", "MANAGER", "USER")
+                .build();
+
+        UserDetails user = User.builder()
+                .username("user")
+                .password("user")
+                .passwordEncoder(passwordEncoder()::encode)
+                .roles("USER")
+                .build();
+
+        UserDetails manager = User.builder()
+                .username("manager")
+                .password("manager")
+                .passwordEncoder(passwordEncoder()::encode)
+                .roles("MANAGER", "USER")
+                .build();
+
+        return new InMemoryUserDetailsManager(admin, manager, user);
+    }
+
+    @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
+//    @Bean
+//    public Filter createRequestHeadersPreAuthenticationFilter(AuthenticationManager authenticationManager) throws Exception {
+//        log.info("@@@@@@@@@@@@@@@@@@@ createRequestHeadersPreAuthenticationFilter() @@@@@@@@@@@@@@@@@@@@@@");
+//        var filter = new RequestHeadersPreAuthenticationFilter();
+//        filter.setAuthenticationDetailsSource(new GrantedAuthoritiesAuthenticationDetailsSource());
+//        filter.setContinueFilterChainOnUnsuccessfulAuthentication(false);
+//        filter.setAuthenticationManager(authenticationManager);
+//        return filter;
+//    }
 }

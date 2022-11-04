@@ -68,15 +68,11 @@ public class GraphQLSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .addFilterBefore(createRequestHeadersPreAuthenticationFilter(), AbstractPreAuthenticatedProcessingFilter.class)
                 .authorizeRequests()
-                .antMatchers("/graphql")
-                .hasAnyRole("USER", "MANAGER", "ADMIN")
-                // Permit playground
-                .antMatchers("/personaQL", "/vendor/personaQL/**")
-                .hasAnyRole("USER", "MANAGER", "ADMIN")
-                // Permit graphiql
-                .antMatchers("/graphiql/**", "/graphql**", "/subscriptions/**", "/vendor/**", "/graphiql-subscriptions-fetcher@0.0.2/**", "/subscriptions-transport-ws@0.8.3/**")
-                .hasAnyRole("USER", "MANAGER", "ADMIN")
-                .antMatchers("/altair/**")
+                .antMatchers("/graphql", "/personaQL", "/vendor/personaQL/**",
+                        "/graphiql/**", "/graphql**", "/subscriptions/**", "/vendor/**",
+                        "/graphiql-subscriptions-fetcher@0.0.2/**", "/subscriptions-transport-ws@0.8.3/**",
+                        "/altair/**"
+                )
                 .hasAnyRole("USER", "MANAGER", "ADMIN")
                 // All endpoints require authentication
                 .anyRequest().authenticated()
