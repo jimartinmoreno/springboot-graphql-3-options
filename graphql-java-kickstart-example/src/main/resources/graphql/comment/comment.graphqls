@@ -6,6 +6,7 @@ type Comment {
     email: String
     body: String
     termLoanFrameworkAgreementAcceptAt(country: AgreementCountry!): String @auth(role : "ROLE_ADMIN")
+    optionalFilterField(filter: String): String
     fixedValue: String
     post: Post
     commenter: Commenter @auth(role : "ROLE_ADMIN")
