@@ -16,7 +16,6 @@ import java.util.concurrent.Executor;
 @Slf4j
 public class OptionalFilteredResolver implements GraphQLResolver<Comment> {
     private final Executor myExecutor;
-
     public CompletableFuture<String> getOptionalFilterField(Comment comment, String filter) {
         return CompletableFuture.supplyAsync(
                 () -> {
