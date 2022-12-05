@@ -14,6 +14,7 @@ import graphql.kickstart.execution.config.GraphQLBuilderConfigurer;
 import graphql.kickstart.servlet.cache.CachedResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -22,6 +23,7 @@ import java.util.List;
 
 @Slf4j
 @Configuration
+@EnableCaching
 public class CacheConfig {
 
     //@Bean

@@ -17,21 +17,18 @@ import static com.example.api.graphql.instrumentation.RequestLoggingInstrumentat
 @Slf4j
 public class LoggingListener implements GraphQLServletListener {
 
-
     @Override
     public RequestCallback onRequest(HttpServletRequest request, HttpServletResponse response) {
+
+
         log.info("onRequest - Received graphQL request");
-        //String correlationId = Optional.ofNullable(request.getHeader(CORRELATION_ID))
-        //       .orElse(UUID.randomUUID().toString());
         log.info("onRequest - CorrelationId from header: {}", request.getHeader(CORRELATION_ID));
-        //log.info("build - CorrelationId final: {}", correlationId);
+        log.info("onRequest - Origin-System-Id from header: {}", request.getHeader("Origin-System-Id"));
 
         /**
          * Relacionado con el Contexto e incluir el CorrelationId en los logs
          */
         var startTime = Instant.now();
-        //        MDC.put(CORRELATION_ID, correlationId);
-        //        MDC.put(START_TIME, startTime.toString());
 
         return new RequestCallback() {
             @Override

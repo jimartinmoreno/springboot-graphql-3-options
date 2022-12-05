@@ -25,7 +25,6 @@ import static com.example.api.config.graphQL.instrumentation.LoggingInstrumentat
 @Slf4j
 public class CorrelationIdFilter implements Filter {
 
-
     @Override
     public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain) throws IOException, ServletException {
         String correlationId= extract(request)

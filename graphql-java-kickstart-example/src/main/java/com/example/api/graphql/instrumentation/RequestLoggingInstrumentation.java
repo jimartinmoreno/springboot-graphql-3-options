@@ -14,7 +14,6 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.http.HttpServletRequest;
 import java.time.Duration;
 import java.time.Instant;
 
@@ -30,7 +29,6 @@ public class RequestLoggingInstrumentation extends SimpleInstrumentation {
     public static final String CORRELATION_ID = "CorrelationId";
     public static final String SECURITY_CONTEXT = "SecurityContext";
     public static final String START_TIME = "startTime";
-    private final HttpServletRequest httpServletRequest;
 
     /**
      * This is called right at the start of query execution and its the first step in the instrumentation chain.
@@ -62,6 +60,8 @@ public class RequestLoggingInstrumentation extends SimpleInstrumentation {
         //MDC.put(CORRELATION_ID, executionId.toString());
 
         log.info("beginExecution - Operation: {} with variables: {}", parameters.getOperation(), parameters.getVariables());
+
+        SimpleInstrumentationContext.noOp();
 
         return SimpleInstrumentationContext.whenCompleted((executionResult, throwable) -> {
             // This callback will occur in the resolver thread.
