@@ -31,5 +31,4 @@ public class RequestHeadersPreAuthenticationFilter extends AbstractPreAuthentica
         log.info("getPreAuthenticatedPrincipal - CorrelationId from header: {}", request.getHeader(CORRELATION_ID));
         return StringUtils.EMPTY;
     }
-
 }

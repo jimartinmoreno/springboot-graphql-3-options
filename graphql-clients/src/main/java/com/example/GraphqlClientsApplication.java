@@ -1,4 +1,4 @@
-package com.example.api;
+package com.example;
 
 import com.example.api.webclient.MyGraphQLWebClient;
 import lombok.extern.slf4j.Slf4j;

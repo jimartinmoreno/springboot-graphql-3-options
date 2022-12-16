@@ -16,7 +16,7 @@ import java.util.function.Consumer;
 
 @SpringBootApplication
 @EnableFeignClients
-@EnableAsync
+//@EnableAsync
 @Slf4j
 public class SpringForGraphqlApplication {
 

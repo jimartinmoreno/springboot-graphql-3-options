@@ -58,7 +58,7 @@ class UserQueryResolverMockTest {
         String testName = "userById";
 
         GraphQLResponse graphQLResponse = graphQLTestTemplate
-                //.withBasicAuth("admin", "admin")
+                .withBasicAuth("admin", "admin")
                 .perform(String.format(GRAPHQL_QUERY_REQUEST_PATH, testName), variables);
 
         User user = new GraphQLResponseWrapper(objectMapper, graphQLResponse)

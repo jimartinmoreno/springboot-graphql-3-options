@@ -16,7 +16,7 @@ public class RequestAttributesAccessor implements ThreadLocalAccessor {
 
     @Override
     public void extractValues(Map<String, Object> container) {
-        //        log.info("extractValues -> container: {}", container);
+        log.info("extractValues -> container: {}", container);
         //        log.info("extractValues -> RequestAttributes: {}", RequestContextHolder.getRequestAttributes().getAttributeNames(RequestAttributes.SCOPE_REQUEST));
         //        log.info("extractValues -> CurrentRequestAttributes: {}", RequestContextHolder.currentRequestAttributes().getAttributeNames(RequestAttributes.SCOPE_REQUEST));
         container.put(KEY, RequestContextHolder.getRequestAttributes());
@@ -24,20 +24,19 @@ public class RequestAttributesAccessor implements ThreadLocalAccessor {
 
     @Override
     public void restoreValues(Map<String, Object> values) {
-        //        log.info("restoreValues -> values: {}", values);
+        log.info("restoreValues -> values: {}", values);
         //        log.info("restoreValues -> RequestAttributes: {}", RequestContextHolder.getRequestAttributes());
         if (values.containsKey(KEY)) {
             RequestContextHolder.setRequestAttributes((RequestAttributes) values.get(KEY));
         }
-        //        log.info("restoreValues -> RequestAttributes 2: {}", RequestContextHolder.getRequestAttributes());
+        log.info("restoreValues -> RequestAttributes 2: {}", RequestContextHolder.getRequestAttributes());
     }
 
     @Override
     public void resetValues(Map<String, Object> values) {
-        //        log.info("resetValues -> values: {}", values);
+        log.info("resetValues -> values: {}", values);
         //        log.info("resetValues -> RequestAttributes: {}", RequestContextHolder.getRequestAttributes());
         RequestContextHolder.resetRequestAttributes();
-        //        log.info("resetValues -> RequestAttributes: {}", RequestContextHolder.getRequestAttributes());
+        log.info("resetValues -> RequestAttributes: {}", RequestContextHolder.getRequestAttributes());
     }
-
 }

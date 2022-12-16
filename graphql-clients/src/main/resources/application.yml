@@ -1,6 +1,6 @@
 graphql:
   client:
-#    url: http://localhost:8081/graphql
+    url: http://localhost:8081/graphql
 #    oauth2:
 #      client-id: "OAuth2 client id"
 #      client-secret: "OAuth2 client secret"
