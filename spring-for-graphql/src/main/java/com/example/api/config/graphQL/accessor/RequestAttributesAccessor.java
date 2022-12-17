@@ -1,7 +1,7 @@
 package com.example.api.config.graphQL.accessor;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.graphql.execution.ThreadLocalAccessor;
+//import org.springframework.graphql.execution.ThreadLocalAccessor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -9,12 +9,12 @@ import org.springframework.web.context.request.RequestContextHolder;
 import java.util.Map;
 
 @Slf4j
-@Component
-public class RequestAttributesAccessor implements ThreadLocalAccessor {
+//@Component
+public class RequestAttributesAccessor{ //implements ThreadLocalAccessor {
 
     private static final String KEY = RequestAttributesAccessor.class.getName();
 
-    @Override
+//    @Override
     public void extractValues(Map<String, Object> container) {
         log.info("extractValues -> container: {}", container);
         //        log.info("extractValues -> RequestAttributes: {}", RequestContextHolder.getRequestAttributes().getAttributeNames(RequestAttributes.SCOPE_REQUEST));
@@ -22,7 +22,7 @@ public class RequestAttributesAccessor implements ThreadLocalAccessor {
         container.put(KEY, RequestContextHolder.getRequestAttributes());
     }
 
-    @Override
+//    @Override
     public void restoreValues(Map<String, Object> values) {
         log.info("restoreValues -> values: {}", values);
         //        log.info("restoreValues -> RequestAttributes: {}", RequestContextHolder.getRequestAttributes());
@@ -32,7 +32,7 @@ public class RequestAttributesAccessor implements ThreadLocalAccessor {
         log.info("restoreValues -> RequestAttributes 2: {}", RequestContextHolder.getRequestAttributes());
     }
 
-    @Override
+//    @Override
     public void resetValues(Map<String, Object> values) {
         log.info("resetValues -> values: {}", values);
         //        log.info("resetValues -> RequestAttributes: {}", RequestContextHolder.getRequestAttributes());

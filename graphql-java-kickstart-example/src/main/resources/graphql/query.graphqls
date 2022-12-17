@@ -8,7 +8,7 @@ type Query {
     # Get All Users
     users: [User] @auth(role : "ROLE_ADMIN"),
     # Get All Users Paginated ()
-    usersPaginated(number: Int!, after: String): UserConnection @connection (for: "User"),
+#    usersPaginated(number: Int!, after: String): UserConnection @connection (for: "User"),
     # Get User by userId
     userById(id:ID): User
     # Get User by userIds

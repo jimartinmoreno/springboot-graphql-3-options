@@ -15,6 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import static com.example.api.graphql.instrumentation.RequestLoggingInstrumentation.SECURITY_CONTEXT;
 
@@ -59,9 +60,14 @@ public class AuthorizationDirective implements SchemaDirectiveWiring {
         //3. Get the security context from the graphQl Context
         SecurityContext securityContext = SecurityContextHolder.getContext();
         Authentication authentication = securityContext.getAuthentication();
-        log.info("hasRole >>>>>>>>> AUTHORITIES: {}", authentication.getAuthorities());
-        List<String> roles = authentication.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority).toList();
-        return roles.contains(targetAuthRole);
+        boolean result = Optional.ofNullable(authentication)
+                .map(auth -> {
+                    log.info("hasRole >>>>>>>>> AUTHORITIES: {}", authentication.getAuthorities());
+                    List<String> roles = authentication.getAuthorities().stream()
+                            .map(GrantedAuthority::getAuthority).toList();
+                    return roles.contains(targetAuthRole);
+                })
+                .orElse(false);
+        return result;
     }
 }

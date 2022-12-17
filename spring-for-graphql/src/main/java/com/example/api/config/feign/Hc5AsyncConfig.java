@@ -8,6 +8,7 @@ import feign.codec.Decoder;
 import feign.codec.Encoder;
 import feign.codec.ErrorDecoder;
 import feign.hc5.AsyncApacheHttp5Client;
+import jakarta.annotation.PreDestroy;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.hc.client5.http.config.RequestConfig;
 import org.apache.hc.client5.http.cookie.StandardCookieSpec;
@@ -35,12 +36,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Scope;
 
-import javax.annotation.PreDestroy;
 import java.util.concurrent.TimeUnit;
 
 @Configuration
 @Import(FeignClientsConfiguration.class)
 @Slf4j
+//@EnableConfigurationProperties({FeignHttpClientProperties.class, FeignClientProperties.class})
 public class Hc5AsyncConfig {
 
     private CloseableHttpAsyncClient httpAsyncClient;
@@ -109,7 +110,7 @@ public class Hc5AsyncConfig {
                 .decoder(decoder)
                 .errorDecoder(errorDecoder)
                 .encoder(encoder)
-                .decode404()
+                .dismiss404()
                 .contract(contract);
     }
 

@@ -3,10 +3,10 @@ package com.example.api.graphql.file;
 import graphql.kickstart.servlet.context.DefaultGraphQLServletContext;
 import graphql.kickstart.tools.GraphQLMutationResolver;
 import graphql.schema.DataFetchingEnvironment;
+import jakarta.servlet.http.Part;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.http.Part;
 import java.util.List;
 import java.util.UUID;
 

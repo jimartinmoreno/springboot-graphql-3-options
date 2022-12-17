@@ -5,10 +5,10 @@ import graphql.kickstart.execution.input.GraphQLInvocationInput;
 import graphql.kickstart.execution.input.GraphQLSingleInvocationInput;
 import graphql.kickstart.servlet.cache.CachedResponse;
 import graphql.kickstart.servlet.cache.GraphQLResponseCacheManager;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.servlet.http.HttpServletRequest;
 
 import static com.example.api.config.security.SecurityConfig.USER_ID_PRE_AUTH_HEADER;
 

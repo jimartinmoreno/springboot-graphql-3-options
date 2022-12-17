@@ -29,6 +29,10 @@ public class UserQueryController {
     public CompletableFuture<List<User>> getUsers() {
         return CompletableFuture.supplyAsync(userService::getAllUsers, myExecutor);
     }
+//    @QueryMapping
+//    public List<User> getUsers() {
+//        return userService.getAllUsers();
+//    }
 
     @QueryMapping
     public CompletableFuture<Optional<User>> getUserById(@Argument Long id) {

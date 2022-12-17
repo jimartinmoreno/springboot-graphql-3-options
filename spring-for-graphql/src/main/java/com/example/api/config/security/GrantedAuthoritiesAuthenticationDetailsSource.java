@@ -1,10 +1,9 @@
 package com.example.api.config.security;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationDetailsSource;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedGrantedAuthoritiesWebAuthenticationDetails;
-
-import javax.servlet.http.HttpServletRequest;
 
 import static com.example.api.config.security.SecurityConfig.USER_ROLES_PRE_AUTH_HEADER;
 
@@ -12,7 +11,8 @@ import static com.example.api.config.security.SecurityConfig.USER_ROLES_PRE_AUTH
  * This AuthenticationDetails implementation allows for storing a list of pre-authenticated Granted Authorities.
  */
 @Slf4j
-public class GrantedAuthoritiesAuthenticationDetailsSource implements AuthenticationDetailsSource<HttpServletRequest, PreAuthenticatedGrantedAuthoritiesWebAuthenticationDetails> {
+public class GrantedAuthoritiesAuthenticationDetailsSource implements
+        AuthenticationDetailsSource<HttpServletRequest, PreAuthenticatedGrantedAuthoritiesWebAuthenticationDetails> {
 
     /**
      * Called by a class when it wishes a new authentication details instance to be created.

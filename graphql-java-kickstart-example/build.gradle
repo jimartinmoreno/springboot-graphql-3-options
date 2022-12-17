@@ -15,6 +15,7 @@ compileJava {
 
 repositories {
     mavenCentral()
+    maven { url "https://repo.spring.io/libs-milestone/" }
 }
 
 dependencyManagement {
@@ -28,7 +29,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
 
     // https://github.com/graphql-java-kickstart/graphql-spring-boot
-    implementation 'com.graphql-java-kickstart:graphql-spring-boot-starter:14.0.0'
+    implementation 'com.graphql-java-kickstart:graphql-spring-boot-starter:15.0.0'
+    implementation 'com.graphql-java:graphql-java:19.3'
     // to embed Voyager tool at hostname:post/voyager
     runtimeOnly 'com.graphql-java-kickstart:voyager-spring-boot-starter:11.1.0'
     // Extended scalars
@@ -41,16 +43,16 @@ dependencies {
 
     // Security
     implementation 'org.springframework.boot:spring-boot-starter-security'
-//    implementation 'org.springframework.security:spring-security-web:5.8.0'
+    // implementation 'org.springframework.security:spring-security-web:5.8.0'
     implementation 'org.springframework.security:spring-security-test'
 
     // Validations
-    implementation 'org.hibernate.validator:hibernate-validator'
+    implementation 'org.hibernate.validator:hibernate-validator:8.0.0.Final'
 
     implementation 'commons-io:commons-io:2.11.0'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'com.graphql-java-kickstart:graphql-spring-boot-starter-test:14.0.0'
+    testImplementation 'com.graphql-java-kickstart:graphql-spring-boot-starter-test:15.0.0'
 
     // Lombok and commons for boilerplate code
     implementation 'org.projectlombok:lombok:1.18.24'

@@ -4,7 +4,7 @@
 #voluptates magni quo et
 type User {
     id: ID!
-    name: String @auth(role : "ROLE_ADMIN")
+    name: String @uppercase
     username: String @auth(role : "ROLE_ADMIN")
     email: String @auth(role : "ROLE_ADMIN")
     phone: String @auth(role : "ROLE_ADMIN")

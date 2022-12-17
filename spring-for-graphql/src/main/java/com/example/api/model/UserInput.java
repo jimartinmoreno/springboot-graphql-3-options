@@ -1,8 +1,7 @@
 package com.example.api.model;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.Value;
-
-import javax.validation.constraints.NotBlank;
 
 /**
  * @Value Generates a lot of code which fits with a class that is a representation of an immutable entity.

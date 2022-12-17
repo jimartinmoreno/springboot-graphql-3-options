@@ -32,17 +32,17 @@ public class SecurityConfig {
 //    public SecurityFilterChain securityFilterChain(HttpSecurity http, Filter createRequestHeadersPreAuthenticationFilter, AuthenticationManager authenticationManager) throws Exception {
     public SecurityFilterChain securityFilterChain(HttpSecurity http, InMemoryUserDetailsManager userDetailsService) throws Exception {
         http
-                //.userDetailsService(userDetailsService)
+                .userDetailsService(userDetailsService)
                 //.authenticationManager(authenticationManager);
                 //.addFilterBefore(createRequestHeadersPreAuthenticationFilter, AbstractPreAuthenticatedProcessingFilter.class)
-
-                .csrf().disable().authorizeRequests()
-                .antMatchers("/graphql", "/personaQL", "/vendor/personaQL/**", "/graphiql/**",
-                                    "/graphql**", "/subscriptions/**", "/vendor/**", "/graphiql-subscriptions-fetcher@0.0.2/**",
-                                    "/subscriptions-transport-ws@0.8.3/**")
-                            // .hasAnyRole("USER", "MANAGER", "ADMIN");
-                            .authenticated()
-                .and()
+                .securityContext((securityContext) -> securityContext
+                        .requireExplicitSave(true)
+                )
+                .csrf().disable()
+                .authorizeHttpRequests((authorize) -> authorize
+                        .requestMatchers("/**")
+                        .authenticated()
+                )
                 .httpBasic(withDefaults())
                 .anonymous().disable();
 

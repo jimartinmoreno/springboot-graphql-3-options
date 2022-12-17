@@ -1,12 +1,13 @@
 # Query for read operations
 directive @auth(role : String!) on FIELD_DEFINITION | INPUT_FIELD_DEFINITION | FIELD_DEFINITION | MUTATION | QUERY
+directive @uppercase on ARGUMENT_DEFINITION | INPUT_FIELD_DEFINITION | FIELD_DEFINITION
 
 # All Available Queries
 type Query {
     # Get All Users
-    getUsers: [User] @auth(role : "ROLE_ADMIN"),
+    getUsers: [User] @auth(role : "ROLE_ADMIN")
     # Get User by userId
-    getUserById(id:ID): User @auth(role : "ROLE_ADMIN")
+    getUserById(id:ID): User
     # Get User by userIds
     getUsersByIds(ids:[ID]): [User] @auth(role : "ROLE_ADMIN")
     # Get All Posts

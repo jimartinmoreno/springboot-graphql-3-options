@@ -8,6 +8,21 @@ spring:
       bindings:
         authenticationMessageConsumer-in-0:
           enabled: false
+    #    https://docs.spring.io/spring-cloud-openfeign/docs/current/reference/html/
+    openfeign:
+      client:
+        config:
+          default:
+            connectTimeout: 5000
+            readTimeout: 5000
+            loggerLevel: basic
+#          userFeignClient:
+#            url: https://jsonplaceholder.typicode.com
+#            connectTimeout: 5000
+#            readTimeout: 5000
+#            loggerLevel: full
+#            dismiss404: true
+
   servlet:
     multipart:
       max-file-size: 1MB

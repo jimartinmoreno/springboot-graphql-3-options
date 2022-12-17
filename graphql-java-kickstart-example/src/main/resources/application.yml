@@ -14,6 +14,14 @@ spring:
       - rate-limit-buckets
     caffeine:
       spec: maximumSize=100000,expireAfterAccess=3600s
+  cloud:
+    openfeign:
+      client:
+        config:
+          default:
+            loggerLevel: BASIC #Possible options: BASIC, FULL, HEADERS, NONE
+            connectTimeout: 5000
+            readTimeout: 5000
 
 #  security:
 #    user:
@@ -158,27 +166,39 @@ bucket4j:
       filter-order: 1 # Set it to a number higher then zero to execute it after e.g. Spring Security.
       http-response-body: "{ \"errors\":{ \"status\": 429, \"message\": \"Too Many Requests\", \"extensions\": { \"classification\": \"TOO_MANY_REQUEST\" },  \"path\": \"/graphql\" } }"
       rate-limits:
-#        - expression: "getHeader('Origin-System-Id')"
-#          execute-condition: "'user'.equals(getHeader('Origin-System-Id'))"
+        - expression: "getHeader('Origin-System-Id')"
+          execute-condition: "'user'.equals(getHeader('Origin-System-Id'))"
+          bandwidths:
+            - capacity: 3
+              time: 1
+              unit: minutes
+        - expression: "getHeader('Origin-System-Id')"
+          execute-condition: "'manager'.equals(getHeader('Origin-System-Id'))"
+          bandwidths:
+            - capacity: 10
+              time: 1
+              unit: minutes
+        - expression: "getHeader('Origin-System-Id')"
+          execute-condition: "'admin'.equals(getHeader('Origin-System-Id'))"
+          bandwidths:
+            - capacity: 10
+              time: 1
+              unit: minutes
+#        - expression: "@securityService.username() != null ? @securityService.username() : 'anonym'"
+#          execute-condition: "'user'.equals(@securityService.username())"
 #          bandwidths:
 #            - capacity: 3
 #              time: 1
 #              unit: minutes
-        - expression: "@securityService.username() != null ? @securityService.username() : 'anonym'"
-          execute-condition: "'user'.equals(@securityService.username())"
-          bandwidths:
-            - capacity: 3
-              time: 1
-              unit: minutes
-        - expression: "@securityService.username() != null ? @securityService.username() : 'anonym'"
-          execute-condition: "'manager'.equals(@securityService.username())"
-          bandwidths:
-            - capacity: 3
-              time: 1
-              unit: minutes
-        - expression: "@securityService.username() != null ? @securityService.username() : 'anonym'"
-          execute-condition: "'admin'.equals(@securityService.username())"
-          bandwidths:
-            - capacity: 1000
-              time: 1
-              unit: minutes
+#        - expression: "@securityService.username() != null ? @securityService.username() : 'anonym'"
+#          execute-condition: "'manager'.equals(@securityService.username())"
+#          bandwidths:
+#            - capacity: 10
+#              time: 1
+#              unit: minutes
+#        - expression: "@securityService.username() != null ? @securityService.username() : 'anonym'"
+#          execute-condition: "'admin'.equals(@securityService.username())"
+#          bandwidths:
+#            - capacity: 1000
+#              time: 1
+#              unit: minutes

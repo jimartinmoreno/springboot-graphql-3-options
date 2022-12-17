@@ -1,10 +1,10 @@
 package com.example.api.config.security;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationDetailsSource;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedGrantedAuthoritiesWebAuthenticationDetails;
 
-import javax.servlet.http.HttpServletRequest;
 
 import static com.example.api.config.security.SecurityConfig.USER_ROLES_PRE_AUTH_HEADER;
 

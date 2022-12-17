@@ -1,12 +1,12 @@
 package com.example.api.graphql.listener;
 
 import graphql.kickstart.servlet.core.GraphQLServletListener;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.time.Duration;
 import java.time.Instant;
 

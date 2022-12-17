@@ -10,7 +10,7 @@ import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
 @EnableFeignClients
-//@EnableAsync
+@EnableAsync
 public class KickStartApiApplication {
 
     public static void main(String[] args) {

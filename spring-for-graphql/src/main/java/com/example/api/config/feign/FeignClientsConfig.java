@@ -9,6 +9,7 @@ import feign.Logger;
 import feign.Request;
 import lombok.AllArgsConstructor;
 import org.apache.hc.client5.http.protocol.HttpClientContext;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.openfeign.FeignClientProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
