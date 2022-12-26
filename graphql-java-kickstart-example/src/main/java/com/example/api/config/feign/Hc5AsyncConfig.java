@@ -65,7 +65,8 @@ public class Hc5AsyncConfig {
 
     @Bean
     public FeignClientProperties.FeignClientConfiguration defaultClientConfiguration(FeignClientProperties feignClientProperties) {
-        FeignClientProperties.FeignClientConfiguration feignClientConfiguration = feignClientProperties.getConfig().get(feignClientProperties.getDefaultConfig());
+        FeignClientProperties.FeignClientConfiguration feignClientConfiguration = feignClientProperties.getConfig()
+                .get(feignClientProperties.getDefaultConfig());
         feignClientConfiguration.setLoggerLevel(Logger.Level.FULL);
         return feignClientConfiguration;
     }
@@ -102,15 +103,19 @@ public class Hc5AsyncConfig {
     @Bean
     @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
     public AsyncFeign.AsyncBuilder<HttpClientContext> defaultAsyncBuilder(AsyncClient<HttpClientContext> httpClient,
-                                                                          Decoder decoder, Encoder encoder,
-                                                                          Contract contract, ErrorDecoder errorDecoder) {
-        return AsyncFeign.<HttpClientContext> builder()
+                                                                          Decoder decoder,
+                                                                          Encoder encoder,
+                                                                          Contract contract,
+                                                                          ErrorDecoder errorDecoder,
+                                                                          GlobalFeignRequestInterceptor globalFeignRequestInterceptor) {
+        return AsyncFeign.<HttpClientContext>builder()
                 .client(httpClient)
                 .decoder(decoder)
                 .errorDecoder(errorDecoder)
                 .encoder(encoder)
                 .dismiss404()
-                .contract(contract);
+                .contract(contract)
+                .requestInterceptor(globalFeignRequestInterceptor);
     }
 
     @PreDestroy

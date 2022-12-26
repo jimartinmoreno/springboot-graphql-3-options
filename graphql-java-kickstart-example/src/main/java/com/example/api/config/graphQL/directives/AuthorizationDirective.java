@@ -24,8 +24,10 @@ public class AuthorizationDirective implements SchemaDirectiveWiring {
 
     @Override
     public GraphQLFieldDefinition onField(SchemaDirectiveWiringEnvironment<GraphQLFieldDefinition> environment) {
-        String targetAuthRole = ((StringValue) Objects.requireNonNull(environment.getDirective().getArgument("role")
-                .getArgumentValue().getValue())).getValue();
+        String targetAuthRole = ((StringValue) Objects.requireNonNull(environment.getAppliedDirective()
+                .getArgument("role")
+                .getArgumentValue().getValue())
+        ).getValue();
 
         GraphQLFieldDefinition field = environment.getElement();
         GraphQLFieldsContainer parentType = environment.getFieldsContainer();
@@ -39,9 +41,10 @@ public class AuthorizationDirective implements SchemaDirectiveWiring {
         DataFetcher<?> authDataFetcher = dataFetchingEnvironment -> {
 
             GraphQLContext graphQlContext = dataFetchingEnvironment.getGraphQlContext();
-            log.info("onField: {},  GraphQlContext: {}", field.getName(),  graphQlContext);
+            log.info("onField: {},  GraphQlContext: {}", field.getName(), graphQlContext);
             SecurityContext securityContext = graphQlContext.get(SECURITY_CONTEXT);
             SecurityContextHolder.setContext(securityContext);
+//            MDC.put(CORRELATION_ID, graphQlContext.get(CORRELATION_ID));
 
             if (hasRole(targetAuthRole)) {
                 return originalDataFetcher.get(dataFetchingEnvironment);
@@ -60,7 +63,7 @@ public class AuthorizationDirective implements SchemaDirectiveWiring {
         //3. Get the security context from the graphQl Context
         SecurityContext securityContext = SecurityContextHolder.getContext();
         Authentication authentication = securityContext.getAuthentication();
-        boolean result = Optional.ofNullable(authentication)
+        return Optional.ofNullable(authentication)
                 .map(auth -> {
                     log.info("hasRole >>>>>>>>> AUTHORITIES: {}", authentication.getAuthorities());
                     List<String> roles = authentication.getAuthorities().stream()
@@ -68,6 +71,5 @@ public class AuthorizationDirective implements SchemaDirectiveWiring {
                     return roles.contains(targetAuthRole);
                 })
                 .orElse(false);
-        return result;
     }
 }

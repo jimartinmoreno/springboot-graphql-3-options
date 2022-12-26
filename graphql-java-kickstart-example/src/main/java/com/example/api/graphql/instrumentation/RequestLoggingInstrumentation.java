@@ -9,6 +9,7 @@ import graphql.execution.instrumentation.parameters.InstrumentationExecutionPara
 import graphql.execution.instrumentation.parameters.InstrumentationFieldFetchParameters;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.MDC;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -32,9 +33,8 @@ public class RequestLoggingInstrumentation extends SimpleInstrumentation {
 
     /**
      * This is called right at the start of query execution and its the first step in the instrumentation chain.
-     * @param parameters
-     * @return
      */
+    @NotNull
     @Override
     public InstrumentationContext<ExecutionResult> beginExecution(InstrumentationExecutionParameters parameters) {
         var start = Instant.now();
@@ -61,8 +61,6 @@ public class RequestLoggingInstrumentation extends SimpleInstrumentation {
 
         log.info("beginExecution - Operation: {} with variables: {}", parameters.getOperation(), parameters.getVariables());
 
-        SimpleInstrumentationContext.noOp();
-
         return SimpleInstrumentationContext.whenCompleted((executionResult, throwable) -> {
             // This callback will occur in the resolver thread.
             var duration = Duration.between(start, Instant.now());
@@ -75,6 +73,7 @@ public class RequestLoggingInstrumentation extends SimpleInstrumentation {
     }
 
     @Override
+    @NotNull
     public InstrumentationContext<Object> beginFieldFetch(InstrumentationFieldFetchParameters parameters) {
         //var customGraphQLContext = (CustomGraphQLContext) parameters.getEnvironment().getContext();
         //log.info("beginFieldFetch - CustomGraphQLContext: {}", customGraphQLContext);
@@ -82,9 +81,10 @@ public class RequestLoggingInstrumentation extends SimpleInstrumentation {
         // Necesario si queremos incluir el CorrelationId en los logs cuando usamos Completable Futures y cliente HTTP Async
         //MDC.put(CORRELATION_ID, customGraphQLContext.getCorrelationId());
         //log.info("beginFieldFetch - with context: {}", context);
-        log.info("beginFieldFetch - GraphQlContext: {}", parameters.getEnvironment().getGraphQlContext());
+
         GraphQLContext graphQlContext = parameters.getEnvironment().getGraphQlContext();
         MDC.put(CORRELATION_ID, graphQlContext.get(CORRELATION_ID));
+        log.info("beginFieldFetch - GraphQlContext: {}", graphQlContext);
         log.info("beginFieldFetch - MDC ContextMap: {}", MDC.getCopyOfContextMap());
         return super.beginFieldFetch(parameters);
     }

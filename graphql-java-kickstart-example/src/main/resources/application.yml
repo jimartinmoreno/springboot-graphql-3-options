@@ -19,9 +19,69 @@ spring:
       client:
         config:
           default:
-            loggerLevel: BASIC #Possible options: BASIC, FULL, HEADERS, NONE
+            loggerLevel: FULL #Possible options: BASIC, FULL, HEADERS, NONE
             connectTimeout: 5000
             readTimeout: 5000
+            error-decoder: com.example.api.exception.FeignErrorDecoder
+            decode404: true
+#            retryer:
+feign:
+  httpclient:
+    max-connections-per-route: 20
+    max-connections: 200
+  client:
+    config:
+      default:
+        loggerLevel: FULL #Possible options: BASIC, FULL, HEADERS, NONE
+        decode404: true
+        connectTimeout: 100
+        readTimeout: 500
+        metrics.enabled: true
+
+resilience4j.retry:
+#  retryAspectOrder: 2
+  metrics:
+    enabled: true
+  configs:
+    default:
+      max-attempts: 3
+      waitDuration: 10
+      enableExponentialBackoff: true
+      exponentialBackoffMultiplier: 2
+      retry-exceptions:
+        - feign.RetryableException
+        - java.net.SocketTimeoutException
+        - java.util.concurrent.CompletionException
+        - org.springframework.web.client.HttpServerErrorException
+        - java.util.concurrent.TimeoutException
+        - feign.FeignException.InternalServerError
+        - feign.FeignException.BadGateway
+        - feign.FeignException.ServiceUnavailable
+        - feign.FeignException.GatewayTimeout
+        - feign.FeignException.FeignServerException
+        - org.apache.hc.client5.http.ConnectTimeoutException
+        - org.apache.hc.client5.http.HttpHostConnectException
+  instances:
+    unstableService:
+      max-attempts: 3
+      waitDuration: 10
+      enableExponentialBackoff: true
+      exponentialBackoffMultiplier: 2
+      retry-exceptions:
+        - feign.RetryableException
+        - java.net.SocketTimeoutException
+        - java.util.concurrent.CompletionException
+        - org.springframework.web.client.HttpServerErrorException
+        - java.util.concurrent.TimeoutException
+        - feign.FeignException.InternalServerError
+        - feign.FeignException.BadGateway
+        - feign.FeignException.ServiceUnavailable
+        - feign.FeignException.GatewayTimeout
+        - feign.FeignException.FeignServerException
+        - org.apache.hc.client5.http.ConnectTimeoutException
+        - org.apache.hc.client5.http.HttpHostConnectException
+    unstableServiceSync:
+      baseConfig: default
 
 #  security:
 #    user:
@@ -30,30 +90,6 @@ spring:
 #      roles: manager
 
 graphql:
-#  altair:
-#    enabled: true
-#    mapping: /altair
-#    subscriptions:
-#      timeout: 30
-#      reconnect: false
-#    static:
-#      base-path: /
-#    page-title: Altair
-#    cdn:
-#      enabled: false
-#      version: 4.0.2
-#    options:
-#      endpoint-url: /graphql
-#      subscriptions-endpoint: /subscriptions
-#      initial-settings:
-#        theme: dracula
-#      initial-headers:
-#        Authorization: "Bearer <your-token>"
-#    resources:
-#      initial-query: defaultQuery.graphql
-#      initial-variables: variables.graphql
-#      initial-pre-request-script: pre-request.graphql
-#      initial-post-request-script: post-request.graphql
   servlet:
     max-query-depth: 20
     # Enable exception handlers
@@ -98,21 +134,8 @@ graphql:
     endpoint: /graphql
     mapping: /personaQL
     settings:
-#      editor.cursorShape: line # possible values: 'line', 'block', 'underline'
-#      editor.fontFamily: "'Source Code Pro', 'Consolas', 'Inconsolata', 'Droid Sans Mono', 'Monaco', monospace"
-#      editor.fontSize: 14
       editor.reuseHeaders: true # new tab reuses headers from last tab
-#      editor.theme: light  # possible values: 'dark', 'light'
-#      general.betaUpdates: false
-#      prettier.printWidth: 80
-#      prettier.tabWidth: 4
-#      prettier.useTabs: true
       request.credentials: include # possible values: 'omit', 'include', 'same-origin' includes the credentials headers in the requests
-#      schema.polling.enable: false # schema.polling.enable: true
-#      schema.polling.endpointFilter: "*localhost*" # o specify a regex pattern to restrict which url to poll. Default: *localhost*
-#      schema.polling.interval: 60000  # schema polling interval in ms
-#      schema.disableComments: false
-#      tracing.hideTracingResponse: false
 
 voyager:
   enabled: true
@@ -123,30 +146,6 @@ logging:
     com.example.api.client: debug
   pattern:
     console: -%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(%5p) %clr(${PID:}){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %clr(%X{CorrelationId}){red} %m%n%wEx
-
-feign:
-  httpclient:
-    max-connections-per-route: 20
-    max-connections: 200
-  client:
-    config:
-      default:
-        loggerLevel: BASIC #Possible options: BASIC, FULL, HEADERS, NONE
-        decode404: true
-        connectTimeout: 500
-        readTimeout: 1000
-        metrics.enabled: false
-
-resilience4j.retry:
-  instances:
-    unstableService:
-      maxAttempts: 3
-      waitDuration: 10
-      enableExponentialBackoff: true
-      exponentialBackoffMultiplier: 2
-      retryExceptions:
-        - org.apache.hc.client5.http.ConnectTimeoutException
-        - java.net.SocketTimeoutException
 
 management:
   endpoints:
