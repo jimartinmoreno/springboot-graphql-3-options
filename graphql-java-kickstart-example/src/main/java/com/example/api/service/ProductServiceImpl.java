@@ -1,6 +1,7 @@
 package com.example.api.service;
 
 import com.example.api.client.ProductClient;
+import com.example.api.client.ProductSpringHttpInterfacesClient;
 import com.example.api.model.Product;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,13 +15,20 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductClient unstableClient;
 
+    private final ProductSpringHttpInterfacesClient productSpringHttpInterfacesClient;
+
     @Override
     public CompletableFuture<Optional<Product>> getProduct() {
-        return unstableClient.unstableWithRetry();
+//        CompletableFuture<Optional<Product>> product = productSpringHttpInterfacesClient.unstable();
+        CompletableFuture<Optional<Product>> product = unstableClient.unstableWithRetry();
+        return product;
     }
+
 
     @Override
     public Optional<Product> getProductSync() {
-        return unstableClient.unstableWithRetrySync();
+//        Optional<Product> product = productSpringHttpInterfacesClient.unstableSync();
+        Optional<Product> product = unstableClient.unstableWithRetrySync();
+        return product;
     }
 }

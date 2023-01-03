@@ -14,41 +14,47 @@ spring:
       - rate-limit-buckets
     caffeine:
       spec: maximumSize=100000,expireAfterAccess=3600s
+
   cloud:
     openfeign:
+      httpclient:
+        max-connections-per-route: 20
+        max-connections: 200
       client:
         config:
           default:
             loggerLevel: FULL #Possible options: BASIC, FULL, HEADERS, NONE
-            connectTimeout: 5000
-            readTimeout: 5000
-            error-decoder: com.example.api.exception.FeignErrorDecoder
+#            request-interceptors:
+#              - com.example.api.config.feign.GlobalFeignRequestInterceptor
+            connectTimeout: 100
+            readTimeout: 300
+#            error-decoder: com.example.api.exception.FeignErrorDecoder
             decode404: true
-#            retryer:
-feign:
-  httpclient:
-    max-connections-per-route: 20
-    max-connections: 200
-  client:
-    config:
-      default:
-        loggerLevel: FULL #Possible options: BASIC, FULL, HEADERS, NONE
-        decode404: true
-        connectTimeout: 100
-        readTimeout: 500
-        metrics.enabled: true
+
+#feign:
+#  httpclient:
+#    max-connections-per-route: 20
+#    max-connections: 200
+#  client:
+#    config:
+#      default:
+#        loggerLevel: FULL #Possible options: BASIC, FULL, HEADERS, NONE
+#        decode404: true
+#        connectTimeout: 100
+#        readTimeout: 300
 
 resilience4j.retry:
-#  retryAspectOrder: 2
+  #  retryAspectOrder: 2
   metrics:
     enabled: true
   configs:
     default:
-      max-attempts: 3
-      waitDuration: 10
+      max-attempts: 2
+      waitDuration: 20
+#      failAfterMaxAttempts: true
       enableExponentialBackoff: true
       exponentialBackoffMultiplier: 2
-      retry-exceptions:
+      retryExceptions:
         - feign.RetryableException
         - java.net.SocketTimeoutException
         - java.util.concurrent.CompletionException
@@ -61,27 +67,28 @@ resilience4j.retry:
         - feign.FeignException.FeignServerException
         - org.apache.hc.client5.http.ConnectTimeoutException
         - org.apache.hc.client5.http.HttpHostConnectException
+    defaultHttp:
+      maxAttempts: 4
+      waitDuration: 10
+      enableExponentialBackoff: true
+      exponentialBackoffMultiplier: 2
+      retryExceptions:
+        - java.net.ConnectException
+        - java.util.concurrent.TimeoutException
+        - org.springframework.web.reactive.function.client.WebClientResponseException.InternalServerError
+        - org.springframework.web.reactive.function.client.WebClientResponseException.ServiceUnavailable
+        - org.springframework.web.reactive.function.client.WebClientResponseException.GatewayTimeout
+        - org.springframework.web.reactive.function.client.WebClientResponseException.TooManyRequests
   instances:
     unstableService:
-      max-attempts: 3
-      waitDuration: 10
-      enableExponentialBackoff: true
-      exponentialBackoffMultiplier: 2
-      retry-exceptions:
-        - feign.RetryableException
-        - java.net.SocketTimeoutException
-        - java.util.concurrent.CompletionException
-        - org.springframework.web.client.HttpServerErrorException
-        - java.util.concurrent.TimeoutException
-        - feign.FeignException.InternalServerError
-        - feign.FeignException.BadGateway
-        - feign.FeignException.ServiceUnavailable
-        - feign.FeignException.GatewayTimeout
-        - feign.FeignException.FeignServerException
-        - org.apache.hc.client5.http.ConnectTimeoutException
-        - org.apache.hc.client5.http.HttpHostConnectException
+      baseConfig: default
     unstableServiceSync:
       baseConfig: default
+    unstableServiceHttp:
+      baseConfig: defaultHttp
+    unstableServiceHttpSync:
+      baseConfig: defaultHttp
+
 
 #  security:
 #    user:
@@ -201,3 +208,7 @@ bucket4j:
 #            - capacity: 1000
 #              time: 1
 #              unit: minutes
+
+management.endpoint.health.show-details: always
+management.endpoints.web.exposure.include: health,info,circuitbreakers,circuitbreakerevents,retries,retryevents
+management.health.retries.enabled: true

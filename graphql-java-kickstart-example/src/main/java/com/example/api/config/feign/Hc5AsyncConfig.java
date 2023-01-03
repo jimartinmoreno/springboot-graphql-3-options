@@ -38,6 +38,8 @@ import org.springframework.context.annotation.Scope;
 
 import java.util.concurrent.TimeUnit;
 
+import static feign.Retryer.NEVER_RETRY;
+
 @Configuration
 @Import(FeignClientsConfiguration.class)
 @Slf4j
@@ -114,6 +116,7 @@ public class Hc5AsyncConfig {
                 .errorDecoder(errorDecoder)
                 .encoder(encoder)
                 .dismiss404()
+                .retryer(NEVER_RETRY)
                 .contract(contract)
                 .requestInterceptor(globalFeignRequestInterceptor);
     }
